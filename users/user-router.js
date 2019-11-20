@@ -1,11 +1,12 @@
 const express = require('express');
 
 const db = require('../data/db-config.js');
+const UsersDao = require('./user-model.js');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  db('users')
+  UsersDao.findAll()
   .then(users => {
     res.json(users);
   })
@@ -17,7 +18,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   const { id } = req.params;
 
-  db('users').where({ id })
+  UsersDao.findById(id)
   .then(users => {
     const user = users[0];
 
@@ -75,6 +76,22 @@ router.delete('/:id', (req, res) => {
   .catch(err => {
     res.status(500).json({ message: 'Failed to delete user' });
   });
+});
+
+router.get('/:id/posts', (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  db
+      .select()
+      .from('users')
+      .join('posts', 'users.id', '=', 'posts.user_id')
+      .where('users.id', id)
+      .then(posts => {
+        res.status(200).json(posts)
+      })
+      .catch(error => {
+        res.status(500).json({ message: 'Failed to retrieve user posts' });
+      })
 });
 
 module.exports = router;

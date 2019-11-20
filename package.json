@@ -4,7 +4,10 @@
   "description": "Guided Project for Node DB3 Module",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon index.js"
+    "server": "nodemon index.js",
+    "seedUsers": "knex seed:make 001-users",
+    "seedPosts": "knex seed:make 002-posts",
+    "seedRun": "knex seed:run"
   },
   "keywords": [],
   "author": "Lambda School",
